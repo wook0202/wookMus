@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Blue Endurance | Digital Album</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --v-blue: #3A5A78;
+            --v-navy: #0A192F;
+            --v-bg: #050A18;
+            --v-accent: #4DA3FF;
+            --v-text: #E0F2FF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
+        body { background-color: var(--v-bg); color: var(--v-text); display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; }
+
+        .container { width: 100%; max-width: 480px; padding: 20px; text-align: center; animation: fadeIn 2s ease-in; }
+        .motto { font-weight: 200; letter-spacing: 4px; font-size: 1.1rem; color: var(--v-accent); margin-bottom: 40px; text-shadow: 0 0 15px rgba(77, 163, 255, 0.4); }
+
+        .tape-deck {
+            width: 100%; aspect-ratio: 1.5 / 1; background: linear-gradient(145deg, #0d1b2a, #1b263b);
+            border-radius: 12px; padding: 20px; position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-bottom: 20px;
+            border: 1px solid rgba(77, 163, 255, 0.1);
+        }
+
+        .tape-label {
+            width: 100%; height: 100%; background: var(--v-blue); border-radius: 6px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            border: 1px solid rgba(255,255,255,0.05); overflow: hidden; position: relative;
+        }
+
+        .tape-window {
+            z-index: 2; width: 70%; height: 35%; background: rgba(0,0,0,0.4); border-radius: 4px;
+            display: flex; justify-content: space-around; align-items: center; margin-bottom: 10px;
+            border: 1px solid var(--v-accent);
+        }
+
+        .reel { width: 45px; height: 45px; border: 2px dashed var(--v-accent); border-radius: 50%; }
+        .spinning { animation: spin 4s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .tape-controls { z-index: 3; display: flex; gap: 15px; margin-top: 5px; }
+        .btn-inner {
+            background: rgba(0, 0, 0, 0.3); border: 1px solid var(--v-accent);
+            color: var(--v-accent); width: 36px; height: 36px; border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: 0.3s;
+        }
+        .btn-inner:hover { background: var(--v-accent); color: var(--v-navy); }
+        .btn-inner .material-icons { font-size: 20px; }
+
+        .tape-title { z-index: 2; color: #fff; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; margin-top: 10px; }
+
+        .track-menu { text-align: left; margin-top: 20px; }
+        .track-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 10px; border-bottom: 1px solid rgba(77, 163, 255, 0.1);
+            cursor: pointer; transition: 0.3s;
+        }
+        .track-row:hover { background: rgba(77, 163, 255, 0.1); transform: translateX(5px); }
+        .track-row .no { font-size: 0.8rem; color: var(--v-accent); font-weight: 700; width: 30px; }
+        .track-row .title { flex: 1; font-size: 0.95rem; font-weight: 400; }
+        .track-row.active { color: var(--v-accent); background: rgba(77, 163, 255, 0.05); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="motto">“Sometimes courage means holding on.”</div>
+
+    <div class="tape-deck">
+        <div class="tape-label">
+            <div class="tape-window">
+                <div class="reel" id="reelL"></div>
+                <div class="reel" id="reelR"></div>
+            </div>
+            
+            <div class="tape-controls">
+                <button class="btn-inner" onclick="pauseMusic()" title="일시정지">
+                    <span class="material-icons">pause</span>
+                </button>
+                <button class="btn-inner" onclick="playMusic()" title="재생">
+                    <span class="material-icons">play_arrow</span>
+                </button>
+            </div>
+            
+            <div class="tape-title" id="tapeTitle">SELECT A TRACK</div>
+        </div>
+    </div>
+
+    <div class="track-menu" id="mainMenu">
+        <div class="track-row" data-track="1" onclick="playTrack(1, '침묵의 부력 (Intro)')"><span class="no">01</span><span class="title">Buoyancy of Silence</span></div>
+        <div class="track-row" data-track="2" onclick="playTrack(2, '파란 환각')"><span class="no">02</span><span class="title">Blue Hallucination</span></div>
+        <div class="track-row" data-track="3" onclick="playTrack(3, '거울의 뒷면 (Title)')"><span class="no">03</span><span class="title">Behind the Mirror</span></div>
+        <div class="track-row" data-track="4" onclick="playTrack(4, '고속도로의 밤')"><span class="no">04</span><span class="title">Midnight Drive</span></div>
+        <div class="track-row" data-track="5" onclick="playTrack(5, '수면 위로 (Outro)')"><span class="no">05</span><span class="title">Surface</span></div>
+    </div>
+</div>
+
+<script>
+    let currentTrackIndex = 0;
+    let currentTitle = "SELECT A TRACK";
+    let audio = new Audio();
+
+    // 트랙 정보 배열
+    const tracks = [
+        { id: 1, title: '침묵의 부력 (Intro)', src: 'track1.mp3' },
+        { id: 2, title: '파란 환각', src: 'track2.mp3' },
+        { id: 3, title: '거울의 뒷면 (Title)', src: 'track3.mp3' },
+        { id: 4, title: '고속도로의 밤', src: 'track4.mp3' },
+        { id: 5, title: '수면 위로 (Outro)', src: 'track5.mp3' }
+    ];
+
+    function playTrack(n, title) {
+        currentTrackIndex = n - 1;
+        currentTitle = title;
+        
+        const track = tracks[currentTrackIndex];
+        
+        if (track.src && (n === 1)) { // 현재는 1번 파일만 있으므로 조건 유지
+            audio.src = track.src;
+        } else {
+            audio.src = ""; 
+            alert(title + " 트랙 파일이 준비되지 않았습니다.");
+            stopReels();
+            return;
+        }
+
+        updateUI(n);
+        playMusic();
+    }
+
+    function updateUI(n) {
+        const rows = document.querySelectorAll('.track-row');
+        rows.forEach((row, index) => {
+            row.classList.toggle('active', index === n-1);
+        });
+    }
+
+    function playMusic() {
+        if (!audio.src) {
+            // 아무것도 선택 안된 상태에서 재생 누르면 1번 트랙부터 시작
+            playTrack(1, tracks[0].title);
+            return;
+        }
+        audio.play().then(() => {
+            startReels();
+            document.getElementById('tapeTitle').innerText = "NOW PLAYING: " + currentTitle;
+        }).catch(e => console.error("재생 오류:", e));
+    }
+
+    function pauseMusic() {
+        audio.pause();
+        stopReels();
+        document.getElementById('tapeTitle').innerText = "PAUSED";
+    }
+
+    function startReels() {
+        document.getElementById('reelL').classList.add('spinning');
+        document.getElementById('reelR').classList.add('spinning');
+    }
+
+    function stopReels() {
+        document.getElementById('reelL').classList.remove('spinning');
+        document.getElementById('reelR').classList.remove('spinning');
+    }
+
+    // 자동 다음 곡 재생 로직
+    audio.onended = function() {
+        if (currentTrackIndex < tracks.length - 1) {
+            const nextIndex = currentTrackIndex + 2; // 다음 트랙 번호 (1부터 시작하므로)
+            const nextTrack = tracks[currentTrackIndex + 1];
+            console.log("다음 트랙으로 이동: " + nextTrack.title);
+            playTrack(nextIndex, nextTrack.title);
+        } else {
+            stopReels();
+            document.getElementById('tapeTitle').innerText = "ALBUM FINISHED";
+        }
+    };
+</script>
+
+</body>
+</html>
